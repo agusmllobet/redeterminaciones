@@ -14,11 +14,11 @@ import TabOrdenes from './ausa/TabOrdenes';
 type TabId = 'evolucion' | 'vigente' | 'historial' | 'cargar' | 'pendientes' | 'ordenes';
 
 const TABS: { id: TabId; label: string }[] = [
+  { id: 'cargar', label: 'Cargar horas del mes' },
+  { id: 'pendientes', label: 'Pendientes a facturar' },
   { id: 'vigente', label: 'Tarifa vigente' },
   { id: 'evolucion', label: 'Evolución de tarifas' },
   { id: 'ordenes', label: 'Órdenes de compra' },
-  { id: 'cargar', label: 'Cargar horas del mes' },
-  { id: 'pendientes', label: 'Pendientes a facturar' },
   { id: 'historial', label: 'Historial mensual' },
 ];
 
