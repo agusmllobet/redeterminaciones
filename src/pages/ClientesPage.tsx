@@ -12,8 +12,8 @@ type Cliente = {
 
 const CLIENTES: Cliente[] = [
   { id: 'ausa', nombre: 'AUSA', logo: 'logo-ausa.png', disponible: true, ruta: '/ausa' },
-  { id: 'gcba', nombre: 'GCBA', disponible: false },
-  { id: 'absa', nombre: 'ABSA', disponible: false },
+  { id: 'gcba', nombre: 'GCBA', logo: 'logo-gcba.png', disponible: false },
+  { id: 'absa', nombre: 'ABSA', logo: 'logo-absa.png', disponible: false },
 ];
 
 export default function ClientesPage() {
