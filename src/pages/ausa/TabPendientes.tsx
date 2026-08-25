@@ -6,7 +6,7 @@ import {
   generarTextoCompleto,
 } from '../../lib/textoGenerator';
 import { formatMoney, periodoCorto } from '../../lib/format';
-import { marcarFacturado } from '../../lib/data';
+import { marcarFacturado, borrarHoras } from '../../lib/data';
 
 export default function TabPendientes({
   data,
@@ -34,6 +34,8 @@ export default function TabPendientes({
   );
   const [copiado, setCopiado] = useState(false);
   const [marcando, setMarcando] = useState(false);
+  const [borrando, setBorrando] = useState<string | null>(null);
+  const [confirmarBorrado, setConfirmarBorrado] = useState<string | null>(null);
 
   const bloquesSeleccionados = bloques.filter((b) => seleccion.has(b.key));
   const totalGeneral = bloquesSeleccionados.reduce((s, b) => s + b.total, 0);
@@ -66,6 +68,19 @@ export default function TabPendientes({
     }
   }
 
+  async function handleBorrar(key: string) {
+    const bloque = bloques.find((b) => b.key === key);
+    if (!bloque) return;
+    setBorrando(key);
+    try {
+      await borrarHoras(bloque.filas.map((f) => f.id));
+      onMarcado();
+    } finally {
+      setBorrando(null);
+      setConfirmarBorrado(null);
+    }
+  }
+
   if (bloques.length === 0) {
     return (
       <p className="text-sm text-slate-500">
@@ -88,9 +103,9 @@ export default function TabPendientes({
         </div>
 
         {bloques.map((b) => (
-          <label
+          <div
             key={b.key}
-            className="flex items-start gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3 cursor-pointer hover:border-slate-300 transition-colors"
+            className="flex items-start gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3 hover:border-slate-300 transition-colors"
           >
             <input
               type="checkbox"
@@ -98,8 +113,8 @@ export default function TabPendientes({
               onChange={() => toggle(b.key)}
               className="mt-1"
             />
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between">
+            <label className="flex-1 min-w-0 cursor-pointer" onClick={() => toggle(b.key)}>
+              <div className="flex items-center justify-between gap-2">
                 <p className="text-sm font-medium text-slate-900">
                   OC {b.orden.numero} · RDT {b.orden.numero_rdt}
                 </p>
@@ -108,8 +123,33 @@ export default function TabPendientes({
                 </p>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">{periodoCorto(b.periodo)}</p>
-            </div>
-          </label>
+            </label>
+            {confirmarBorrado === b.key ? (
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  onClick={() => handleBorrar(b.key)}
+                  disabled={borrando === b.key}
+                  className="text-xs font-medium text-red-600 hover:text-red-700 disabled:opacity-40"
+                >
+                  {borrando === b.key ? 'Borrando…' : 'Confirmar'}
+                </button>
+                <button
+                  onClick={() => setConfirmarBorrado(null)}
+                  className="text-xs text-slate-400 hover:text-slate-600"
+                >
+                  Cancelar
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setConfirmarBorrado(b.key)}
+                className="text-slate-300 hover:text-red-500 transition-colors shrink-0"
+                title="Borrar esta carga"
+              >
+                🗑
+              </button>
+            )}
+          </div>
         ))}
       </div>
 

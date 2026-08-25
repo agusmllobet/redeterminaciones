@@ -35,9 +35,25 @@ export function agruparPendientes(
     g.total += h.total || 0;
   }
 
+  // Orden: por familia (OC madre, en el orden en que fueron creadas),
+  // despues por numero de RDT, y por ultimo por periodo.
+  const ordenMadre = new Map<string, number>();
+  let rank = 0;
+  for (const o of ordenesById.values()) {
+    const madreId = o.oc_madre_id ?? o.id;
+    if (!ordenMadre.has(madreId)) ordenMadre.set(madreId, rank++);
+  }
+
   return Array.from(grupos.values()).sort((a, b) => {
-    if (a.periodo !== b.periodo) return a.periodo.localeCompare(b.periodo);
-    return a.orden.numero.localeCompare(b.orden.numero);
+    const madreA = a.orden.oc_madre_id ?? a.orden.id;
+    const madreB = b.orden.oc_madre_id ?? b.orden.id;
+    const rankA = ordenMadre.get(madreA) ?? 0;
+    const rankB = ordenMadre.get(madreB) ?? 0;
+    if (rankA !== rankB) return rankA - rankB;
+    const rdtA = a.orden.numero_rdt ?? 0;
+    const rdtB = b.orden.numero_rdt ?? 0;
+    if (rdtA !== rdtB) return rdtA - rdtB;
+    return a.periodo.localeCompare(b.periodo);
   });
 }
 

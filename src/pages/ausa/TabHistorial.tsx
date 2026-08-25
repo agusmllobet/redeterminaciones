@@ -1,9 +1,15 @@
-
 import { useState } from 'react';
 import type { ContratacionData } from '../../lib/types';
 import { formatMoney, formatHoras, periodoCorto } from '../../lib/format';
+import { borrarHoras } from '../../lib/data';
 
-export default function TabHistorial({ data }: { data: ContratacionData }) {
+export default function TabHistorial({
+  data,
+  onCambio,
+}: {
+  data: ContratacionData;
+  onCambio: () => void;
+}) {
   const perfilesById = new Map(data.perfiles.map((p) => [p.id, p]));
   const ordenesById = new Map(data.ordenes.map((o) => [o.id, o]));
 
@@ -12,6 +18,19 @@ export default function TabHistorial({ data }: { data: ContratacionData }) {
   );
 
   const [abierto, setAbierto] = useState<string | null>(periodos[0] || null);
+  const [confirmarBorrado, setConfirmarBorrado] = useState<string | null>(null);
+  const [borrando, setBorrando] = useState<string | null>(null);
+
+  async function handleBorrar(id: string) {
+    setBorrando(id);
+    try {
+      await borrarHoras([id]);
+      onCambio();
+    } finally {
+      setBorrando(null);
+      setConfirmarBorrado(null);
+    }
+  }
 
   return (
     <div className="space-y-3">
@@ -51,7 +70,8 @@ export default function TabHistorial({ data }: { data: ContratacionData }) {
                     <th className="text-right px-4 py-2 font-medium text-slate-500">Horas</th>
                     <th className="text-right px-4 py-2 font-medium text-slate-500">Tarifa</th>
                     <th className="text-right px-4 py-2 font-medium text-slate-500">Total</th>
-                    <th className="text-right px-5 py-2 font-medium text-slate-500">Estado</th>
+                    <th className="text-right px-4 py-2 font-medium text-slate-500">Estado</th>
+                    <th className="text-right px-5 py-2 font-medium text-slate-500"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -76,7 +96,7 @@ export default function TabHistorial({ data }: { data: ContratacionData }) {
                         <td className="text-right px-4 py-2 tabular-nums font-medium text-slate-900">
                           {formatMoney(f.total || 0)}
                         </td>
-                        <td className="text-right px-5 py-2">
+                        <td className="text-right px-4 py-2">
                           <span
                             className={`text-xs px-2 py-0.5 rounded-full ${
                               f.facturado
@@ -86,6 +106,33 @@ export default function TabHistorial({ data }: { data: ContratacionData }) {
                           >
                             {f.facturado ? 'Facturado' : 'Pendiente'}
                           </span>
+                        </td>
+                        <td className="text-right px-5 py-2">
+                          {confirmarBorrado === f.id ? (
+                            <span className="inline-flex items-center gap-1.5">
+                              <button
+                                onClick={() => handleBorrar(f.id)}
+                                disabled={borrando === f.id}
+                                className="text-xs font-medium text-red-600 hover:text-red-700 disabled:opacity-40"
+                              >
+                                {borrando === f.id ? 'Borrando…' : 'Confirmar'}
+                              </button>
+                              <button
+                                onClick={() => setConfirmarBorrado(null)}
+                                className="text-xs text-slate-400 hover:text-slate-600"
+                              >
+                                Cancelar
+                              </button>
+                            </span>
+                          ) : (
+                            <button
+                              onClick={() => setConfirmarBorrado(f.id)}
+                              className="text-slate-300 hover:text-red-500 transition-colors"
+                              title="Borrar esta fila"
+                            >
+                              🗑
+                            </button>
+                          )}
                         </td>
                       </tr>
                     );

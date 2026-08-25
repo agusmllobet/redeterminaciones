@@ -130,3 +130,8 @@ export async function marcarFacturado(ids: string[]) {
     .in('id', ids);
   if (error) throw error;
 }
+
+export async function borrarHoras(ids: string[]) {
+  const { error } = await supabase.from('redet_horas_mensuales').delete().in('id', ids);
+  if (error) throw error;
+}

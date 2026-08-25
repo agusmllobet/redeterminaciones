@@ -117,7 +117,7 @@ export default function AusaPage() {
             {tab === 'ordenes' && <TabOrdenes data={data} />}
             {tab === 'cargar' && <TabCargarHoras data={data} onSaved={cargarDatos} />}
             {tab === 'pendientes' && <TabPendientes data={data} onMarcado={cargarDatos} />}
-            {tab === 'historial' && <TabHistorial data={data} />}
+            {tab === 'historial' && <TabHistorial data={data} onCambio={cargarDatos} />}
           </>
         )}
       </main>
