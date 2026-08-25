@@ -32,7 +32,7 @@ export default function LoginPage() {
     setError('');
     try {
       await login(usuario, pinCompleto);
-      navigate('/ausa');
+      navigate('/clientes');
     } catch {
       setError('Contraseña incorrecta');
       setPin('');

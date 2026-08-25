@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import RequireAuth from './components/RequireAuth';
 import LoginPage from './pages/LoginPage';
+import ClientesPage from './pages/ClientesPage';
 import AusaPage from './pages/AusaPage';
 
 export default function App() {
@@ -11,6 +12,14 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route
+            path="/clientes"
+            element={
+              <RequireAuth>
+                <ClientesPage />
+              </RequireAuth>
+            }
+          />
+          <Route
             path="/ausa"
             element={
               <RequireAuth>
@@ -18,7 +27,7 @@ export default function App() {
               </RequireAuth>
             }
           />
-          <Route path="*" element={<Navigate to="/ausa" replace />} />
+          <Route path="*" element={<Navigate to="/clientes" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

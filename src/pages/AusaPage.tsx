@@ -55,6 +55,13 @@ export default function AusaPage() {
       <header className="border-b border-slate-200 bg-white">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate('/clientes')}
+              className="text-slate-400 hover:text-slate-700 transition-colors"
+              title="Volver a clientes"
+            >
+              ←
+            </button>
             <img
               src={`${import.meta.env.BASE_URL}logo-ausa.png`}
               alt="AUSA"
