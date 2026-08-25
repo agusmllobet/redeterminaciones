@@ -12,6 +12,7 @@ export type OrdenCompra = {
   numero_rdt: number | null;
   mes_gatillo: string | null;
   fecha_oc: string | null;
+  archivo_url: string | null;
 };
 
 export type Tarifa = {

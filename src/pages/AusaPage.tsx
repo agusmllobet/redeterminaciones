@@ -9,12 +9,14 @@ import TabVigente from './ausa/TabVigente';
 import TabHistorial from './ausa/TabHistorial';
 import TabCargarHoras from './ausa/TabCargarHoras';
 import TabPendientes from './ausa/TabPendientes';
+import TabOrdenes from './ausa/TabOrdenes';
 
-type TabId = 'evolucion' | 'vigente' | 'historial' | 'cargar' | 'pendientes';
+type TabId = 'evolucion' | 'vigente' | 'historial' | 'cargar' | 'pendientes' | 'ordenes';
 
 const TABS: { id: TabId; label: string }[] = [
   { id: 'vigente', label: 'Tarifa vigente' },
   { id: 'evolucion', label: 'Evolución de tarifas' },
+  { id: 'ordenes', label: 'Órdenes de compra' },
   { id: 'cargar', label: 'Cargar horas del mes' },
   { id: 'pendientes', label: 'Pendientes a facturar' },
   { id: 'historial', label: 'Historial mensual' },
@@ -101,6 +103,7 @@ export default function AusaPage() {
           <>
             {tab === 'vigente' && <TabVigente data={data} />}
             {tab === 'evolucion' && <TabEvolucion data={data} />}
+            {tab === 'ordenes' && <TabOrdenes data={data} />}
             {tab === 'cargar' && <TabCargarHoras data={data} onSaved={cargarDatos} />}
             {tab === 'pendientes' && <TabPendientes data={data} onMarcado={cargarDatos} />}
             {tab === 'historial' && <TabHistorial data={data} />}

@@ -27,7 +27,7 @@ export async function traerDatosAusa(): Promise<ContratacionData> {
       .order('orden'),
     supabase
       .from('redet_ordenes_compra')
-      .select('id, numero, tipo, oc_madre_id, numero_rdt, mes_gatillo, fecha_oc')
+      .select('id, numero, tipo, oc_madre_id, numero_rdt, mes_gatillo, fecha_oc, archivo_url')
       .eq('contratacion_id', contratacion.id)
       .order('fecha_oc'),
     supabase
