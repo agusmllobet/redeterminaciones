@@ -108,30 +108,32 @@ export default function TabHistorial({
                           </span>
                         </td>
                         <td className="text-right px-5 py-2">
-                          {confirmarBorrado === f.id ? (
-                            <span className="inline-flex items-center gap-1.5">
+                          {!f.facturado && (
+                            confirmarBorrado === f.id ? (
+                              <span className="inline-flex items-center gap-1.5">
+                                <button
+                                  onClick={() => handleBorrar(f.id)}
+                                  disabled={borrando === f.id}
+                                  className="text-xs font-medium text-red-600 hover:text-red-700 disabled:opacity-40"
+                                >
+                                  {borrando === f.id ? 'Borrando…' : 'Confirmar'}
+                                </button>
+                                <button
+                                  onClick={() => setConfirmarBorrado(null)}
+                                  className="text-xs text-slate-400 hover:text-slate-600"
+                                >
+                                  Cancelar
+                                </button>
+                              </span>
+                            ) : (
                               <button
-                                onClick={() => handleBorrar(f.id)}
-                                disabled={borrando === f.id}
-                                className="text-xs font-medium text-red-600 hover:text-red-700 disabled:opacity-40"
+                                onClick={() => setConfirmarBorrado(f.id)}
+                                className="text-slate-300 hover:text-red-500 transition-colors"
+                                title="Borrar esta fila"
                               >
-                                {borrando === f.id ? 'Borrando…' : 'Confirmar'}
+                                🗑
                               </button>
-                              <button
-                                onClick={() => setConfirmarBorrado(null)}
-                                className="text-xs text-slate-400 hover:text-slate-600"
-                              >
-                                Cancelar
-                              </button>
-                            </span>
-                          ) : (
-                            <button
-                              onClick={() => setConfirmarBorrado(f.id)}
-                              className="text-slate-300 hover:text-red-500 transition-colors"
-                              title="Borrar esta fila"
-                            >
-                              🗑
-                            </button>
+                            )
                           )}
                         </td>
                       </tr>
