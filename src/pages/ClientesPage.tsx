@@ -45,34 +45,46 @@ export default function ClientesPage() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <main className="max-w-5xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {CLIENTES.map((c) => (
             <button
               key={c.id}
               onClick={() => c.disponible && c.ruta && navigate(c.ruta)}
               disabled={!c.disponible}
-              className={`flex flex-col items-center justify-center gap-4 rounded-2xl border p-8 transition-colors ${
+              className={`group relative flex flex-col items-center gap-5 rounded-2xl border bg-white p-8 pt-10 transition-all ${
                 c.disponible
-                  ? 'bg-white border-slate-200 hover:border-slate-400 hover:shadow-sm cursor-pointer'
-                  : 'bg-slate-100 border-slate-200 opacity-60 cursor-not-allowed'
+                  ? 'border-slate-200 hover:border-slate-300 hover:shadow-md cursor-pointer'
+                  : 'border-slate-200 cursor-not-allowed'
               }`}
             >
-              {c.logo ? (
-                <img
-                  src={`${import.meta.env.BASE_URL}${c.logo}`}
-                  alt={c.nombre}
-                  className="h-12 w-auto"
-                />
-              ) : (
-                <span className="w-14 h-14 rounded-full bg-slate-300 text-white flex items-center justify-center text-lg font-semibold">
-                  {c.nombre.slice(0, 2)}
-                </span>
-              )}
+              <div
+                className={`flex items-center justify-center w-full h-20 ${
+                  c.disponible ? '' : 'grayscale opacity-50'
+                }`}
+              >
+                {c.logo ? (
+                  <img
+                    src={`${import.meta.env.BASE_URL}${c.logo}`}
+                    alt={c.nombre}
+                    className="max-h-20 max-w-[85%] w-auto object-contain"
+                  />
+                ) : (
+                  <span className="w-16 h-16 rounded-full bg-slate-300 text-white flex items-center justify-center text-xl font-semibold">
+                    {c.nombre.slice(0, 2)}
+                  </span>
+                )}
+              </div>
               <div className="text-center">
-                <p className="text-sm font-medium text-slate-900">{c.nombre}</p>
+                <p
+                  className={`text-sm font-semibold ${
+                    c.disponible ? 'text-slate-900' : 'text-slate-400'
+                  }`}
+                >
+                  {c.nombre}
+                </p>
                 {!c.disponible && (
-                  <p className="text-xs text-slate-400 mt-0.5">Próximamente</p>
+                  <p className="text-xs text-slate-400 mt-1">Próximamente</p>
                 )}
               </div>
             </button>
