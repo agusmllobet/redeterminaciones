@@ -56,11 +56,18 @@ export default function AusaPage() {
     <div className="min-h-screen">
       <header className="border-b border-slate-200 bg-white">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-lg font-semibold text-slate-900">AUSA</h1>
-            <p className="text-xs text-slate-500">
-              {data?.contratacion.parg} · {data?.contratacion.codigo}
-            </p>
+          <div className="flex items-center gap-3">
+            <img
+              src={`${import.meta.env.BASE_URL}logo-ausa.png`}
+              alt="AUSA"
+              className="h-8 w-auto"
+            />
+            <div>
+              <h1 className="text-lg font-semibold text-slate-900">AUSA</h1>
+              <p className="text-xs text-slate-500">
+                {data?.contratacion.parg} · {data?.contratacion.codigo}
+              </p>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             {usuario && <span className="text-sm text-slate-500">{usuario}</span>}
