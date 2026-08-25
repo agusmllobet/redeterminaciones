@@ -15,24 +15,33 @@ export function armarFamilias(ordenes: OrdenCompra[]): Familia[] {
   }));
 }
 
-// Tarifa vigente de un perfil dentro de una familia: la de la hija con
-// mayor numero_rdt que tenga tarifa cargada para ese perfil; si ninguna
-// hija tiene tarifa para ese perfil, cae a la tarifa inicial (madre).
+// Tarifa vigente de un perfil dentro de una familia: la suma de la
+// tarifa inicial (madre) mas todas las redeterminaciones (Red 1, Red 2,
+// Red 3...) que tengan tarifa cargada para ese perfil.
 export function tarifaVigente(
   familia: Familia,
   perfilId: string,
   tarifas: Tarifa[]
-): { tarifa: number; origen: OrdenCompra } | null {
+): { tarifa: number } | null {
   const porOc = new Map(tarifas.map((t) => [`${t.orden_compra_id}:${t.perfil_id}`, t]));
 
-  for (let i = familia.hijas.length - 1; i >= 0; i--) {
-    const hija = familia.hijas[i];
-    const t = porOc.get(`${hija.id}:${perfilId}`);
-    if (t) return { tarifa: t.tarifa, origen: hija };
+  let suma = 0;
+  let encontroAlguna = false;
+
+  const inicial = porOc.get(`${familia.madre.id}:${perfilId}`);
+  if (inicial) {
+    suma += inicial.tarifa;
+    encontroAlguna = true;
   }
 
-  const t = porOc.get(`${familia.madre.id}:${perfilId}`);
-  if (t) return { tarifa: t.tarifa, origen: familia.madre };
+  for (const hija of familia.hijas) {
+    const t = porOc.get(`${hija.id}:${perfilId}`);
+    if (t) {
+      suma += t.tarifa;
+      encontroAlguna = true;
+    }
+  }
 
-  return null;
+  if (!encontroAlguna) return null;
+  return { tarifa: suma };
 }
