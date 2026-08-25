@@ -59,15 +59,15 @@ export default function ClientesPage() {
               }`}
             >
               <div
-                className={`flex items-center justify-center w-full h-20 ${
+                className={`flex items-center justify-center w-full h-20 rounded-xl ${
                   c.disponible ? '' : 'grayscale opacity-50'
-                }`}
+                } ${c.id === 'absa' ? 'bg-slate-800' : ''}`}
               >
                 {c.logo ? (
                   <img
                     src={`${import.meta.env.BASE_URL}${c.logo}`}
                     alt={c.nombre}
-                    className="max-h-20 max-w-[85%] w-auto object-contain"
+                    className="max-h-16 max-w-[75%] w-auto object-contain"
                   />
                 ) : (
                   <span className="w-16 h-16 rounded-full bg-slate-300 text-white flex items-center justify-center text-xl font-semibold">
