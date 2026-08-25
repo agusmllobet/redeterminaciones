@@ -67,9 +67,7 @@ export default function ClientesPage() {
                   <img
                     src={`${import.meta.env.BASE_URL}${c.logo}`}
                     alt={c.nombre}
-                    className={`w-auto object-contain ${
-                      c.id === 'absa' ? 'max-h-14 max-w-[65%]' : 'max-h-16 max-w-[75%]'
-                    }`}
+                    className="max-h-16 max-w-[80%] w-auto object-contain"
                   />
                 ) : (
                   <span className="w-16 h-16 rounded-full bg-slate-300 text-white flex items-center justify-center text-xl font-semibold">
