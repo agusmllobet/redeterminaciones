@@ -5,18 +5,16 @@ import { traerDatosAusa } from '../lib/data';
 import { logout } from '../lib/auth';
 import { useAuth } from '../context/AuthContext';
 import TabEvolucion from './ausa/TabEvolucion';
-import TabVigente from './ausa/TabVigente';
 import TabHistorial from './ausa/TabHistorial';
 import TabCargarHoras from './ausa/TabCargarHoras';
 import TabPendientes from './ausa/TabPendientes';
 import TabOrdenes from './ausa/TabOrdenes';
 
-type TabId = 'evolucion' | 'vigente' | 'historial' | 'cargar' | 'pendientes' | 'ordenes';
+type TabId = 'evolucion' | 'historial' | 'cargar' | 'pendientes' | 'ordenes';
 
 const TABS: { id: TabId; label: string }[] = [
   { id: 'cargar', label: 'Cargar horas del mes' },
   { id: 'pendientes', label: 'Pendientes a facturar' },
-  { id: 'vigente', label: 'Tarifa vigente' },
   { id: 'evolucion', label: 'Evolución de tarifas' },
   { id: 'ordenes', label: 'Órdenes de compra' },
   { id: 'historial', label: 'Historial mensual' },
@@ -28,7 +26,7 @@ export default function AusaPage() {
   const [data, setData] = useState<ContratacionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [tab, setTab] = useState<TabId>('vigente');
+  const [tab, setTab] = useState<TabId>('cargar');
 
   const cargarDatos = useCallback(async () => {
     setLoading(true);
@@ -108,7 +106,6 @@ export default function AusaPage() {
         )}
         {data && !loading && (
           <>
-            {tab === 'vigente' && <TabVigente data={data} />}
             {tab === 'evolucion' && <TabEvolucion data={data} />}
             {tab === 'ordenes' && <TabOrdenes data={data} />}
             {tab === 'cargar' && <TabCargarHoras data={data} onSaved={cargarDatos} />}

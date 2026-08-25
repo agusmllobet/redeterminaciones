@@ -1,6 +1,5 @@
-
 import type { ContratacionData } from '../../lib/types';
-import { armarFamilias } from '../../lib/familias';
+import { armarFamilias, tarifaVigente } from '../../lib/familias';
 import { formatMoney } from '../../lib/format';
 
 export default function TabEvolucion({ data }: { data: ContratacionData }) {
@@ -29,6 +28,9 @@ export default function TabEvolucion({ data }: { data: ContratacionData }) {
                 <thead>
                   <tr className="border-b border-slate-200">
                     <th className="text-left px-5 py-2.5 font-medium text-slate-500">Perfil</th>
+                    <th className="text-right px-4 py-2.5 font-medium text-slate-900">
+                      Tarifa vigente
+                    </th>
                     <th className="text-right px-4 py-2.5 font-medium text-slate-500">
                       Tarifa inicial
                     </th>
@@ -43,21 +45,29 @@ export default function TabEvolucion({ data }: { data: ContratacionData }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {perfilesDeEstaFamilia.map((p) => (
-                    <tr key={p.id} className="border-b border-slate-100 last:border-0">
-                      <td className="px-5 py-2.5 text-slate-700">{p.nombre}</td>
-                      {columnas.map((oc) => {
-                        const t = tarifaByOcPerfil.get(`${oc.id}:${p.id}`);
-                        return (
-                          <td key={oc.id} className="text-right px-4 py-2.5 tabular-nums text-slate-900">
-                            {t !== undefined ? formatMoney(t) : (
-                              <span className="text-slate-300">—</span>
-                            )}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  ))}
+                  {perfilesDeEstaFamilia.map((p) => {
+                    const vigente = tarifaVigente(fam, p.id, data.tarifas);
+                    return (
+                      <tr key={p.id} className="border-b border-slate-100 last:border-0">
+                        <td className="px-5 py-2.5 text-slate-700">{p.nombre}</td>
+                        <td className="text-right px-4 py-2.5 tabular-nums font-semibold text-slate-900">
+                          {vigente ? formatMoney(vigente.tarifa) : (
+                            <span className="text-slate-300">—</span>
+                          )}
+                        </td>
+                        {columnas.map((oc) => {
+                          const t = tarifaByOcPerfil.get(`${oc.id}:${p.id}`);
+                          return (
+                            <td key={oc.id} className="text-right px-4 py-2.5 tabular-nums text-slate-900">
+                              {t !== undefined ? formatMoney(t) : (
+                                <span className="text-slate-300">—</span>
+                              )}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
